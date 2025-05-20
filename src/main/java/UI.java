@@ -7,13 +7,15 @@ import javafx.stage.*;
 
 public class UI extends Application {
 
+    private final BackEnd backEnd = new BackEnd();
+
     @Override
     public void start(Stage stage) {
         TextField rowField = new TextField();
-        rowField.setPromptText("Рядки");
+        rowField.setPromptText("1");
 
         TextField colField = new TextField();
-        colField.setPromptText("Стовпці");
+        colField.setPromptText("1");
 
         Button drawBtn = new Button("Намалювати");
         Button saveBtn = new Button("Зберегти PNG");
@@ -37,10 +39,23 @@ public class UI extends Application {
         root.setLeft(controlPanel);
         root.setCenter(scrollPane);
 
-        drawBtn.setOnAction(e -> {});
+        drawBtn.setOnAction(_ -> backEnd.changeSize(drawPane, saveParse(rowField.getText()), saveParse(colField.getText())));
+
+        saveBtn.setOnAction(_ -> backEnd.saveInPNGFile());
 
         stage.setScene(new Scene(root, 800, 600));
         stage.setTitle("Генератор сітки");
         stage.show();
+
+        backEnd.drawEmbroidery(drawPane);
+    }
+
+    private int saveParse(String text){
+        try {
+            return Integer.parseInt(text);
+        }
+        catch (NumberFormatException e) {
+            return 1;
+        }
     }
 }
