@@ -4,11 +4,18 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 
-
+/**
+ * Клас UI відповідає за графічний інтерфейс JavaFX-додатку.
+ * Він містить поля для введення розміру вишивки, кнопки для малювання та збереження у PNG.
+ */
 public class UI extends Application {
 
     private final BackEnd backEnd = new BackEnd();
 
+    /**
+     * Запускає головне вікно додатку.
+     * @param stage основна сцена JavaFX
+     */
     @Override
     public void start(Stage stage) {
         TextField rowField = new TextField();
@@ -44,12 +51,17 @@ public class UI extends Application {
         saveBtn.setOnAction(_ -> backEnd.saveInPNGFile());
 
         stage.setScene(new Scene(root, 800, 600));
-        stage.setTitle("Генератор сітки");
+        stage.setTitle("Вишиванка - Безух Данило");
         stage.show();
 
         backEnd.drawEmbroidery(drawPane);
     }
 
+    /**
+     * Перетворює текст на число. Якщо не вдалося — повертає 1.
+     * @param text рядок з числами
+     * @return ціле число або 1
+     */
     private int saveParse(String text){
         try {
             return Integer.parseInt(text);

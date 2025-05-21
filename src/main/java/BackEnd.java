@@ -10,12 +10,19 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
+/**
+ * BackEnd відповідає за логіку створення вишивки, масштабування та збереження у PNG.
+ */
 public class BackEnd {
     int[][] embroidery;
     final static int EMBROIDERY_SIZE = 20;
     final static int RECTANGLE_SIZE = 10;
     final static Random rand = new Random();
 
+    /**
+     * Малює чорні елементи вишивки.
+     * Призначення чорних пікселів вручну (залежить від імені користувача).
+     */
     private void drawBlack(){
         embroidery = new int[20][20];
 
@@ -44,6 +51,9 @@ public class BackEnd {
         embroidery[9][9] = 1;
     }
 
+    /**
+     * Малює випадкові червоні пікселі у верхній лівій чверті.
+     */
     private void drawRed(){
         for (int r = 0; r < embroidery.length / 2; r++) {
             for (int c = 0; c < embroidery.length / 2; c++) {
@@ -54,6 +64,9 @@ public class BackEnd {
     }
 
 
+    /**
+     * Заповнює масив симетрично у всі сторони.
+     */
     private void fillSymmetrically(){
         for (int r = 0; r <= embroidery.length / 2; r++) {
             for (int c = 0; c <= embroidery.length / 2; c++) {
@@ -64,6 +77,10 @@ public class BackEnd {
         }
     }
 
+    /**
+     * Малює прямокутники на панелі відповідно до даних вишивки.
+     * @param pane панель, на яку додаються прямокутники
+     */
     private void drawAll(Pane pane){
         pane.getChildren().clear();
 
@@ -87,7 +104,10 @@ public class BackEnd {
         }
     }
 
-
+    /**
+     * Малює початкову вишивку.
+     * @param pane панель для малювання
+     */
     public void drawEmbroidery(Pane pane){
         drawBlack();
         drawRed();
@@ -95,11 +115,22 @@ public class BackEnd {
         drawAll(pane);
     }
 
+    /**
+     * Масштабує вишивку і перемальовує.
+     * @param pane панель для малювання
+     * @param width кількість повторів по горизонталі
+     * @param height кількість повторів по вертикалі
+     */
     public void changeSize(Pane pane, int width, int height){
         resizeArray(width, height);
         drawAll(pane);
     }
 
+    /**
+     * Розширює масив вишивки шляхом повторення шаблону.
+     * @param widthRepeats кількість повторів по ширині
+     * @param heightRepeats кількість повторів по висоті
+     */
     private void resizeArray(int widthRepeats, int heightRepeats) {
         int[][] temp = new int[EMBROIDERY_SIZE * heightRepeats][EMBROIDERY_SIZE * widthRepeats];
 
@@ -112,6 +143,9 @@ public class BackEnd {
         embroidery = temp;
     }
 
+    /**
+     * Зберігає зображення вишивки у PNG з назвою у форматі дати-часу.
+     */
     public void saveInPNGFile(){
         BufferedImage image = getBufferedImage();
 
@@ -127,6 +161,10 @@ public class BackEnd {
         }
     }
 
+    /**
+     * Перетворює embroidery[][] на BufferedImage для збереження.
+     * @return BufferedImage з даними вишивки
+     */
     private BufferedImage getBufferedImage() {
         BufferedImage image = new BufferedImage(embroidery.length, embroidery[0].length, BufferedImage.TYPE_INT_RGB);
         for (int r = 0; r < embroidery.length; r++) {
